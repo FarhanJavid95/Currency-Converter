@@ -1,0 +1,29 @@
+:host {
+    display: block;
+    width: 100%;
+  }
+
+
+.mainContainer {
+    display: flex;
+    flex-wrap: wrap;
+}
+  
+.item {
+    flex-basis: calc(22% - 20px);
+    margin: 0px 10px 0px 0px;
+    min-width: 150px;
+}
+
+:host ::ng-deep #period .mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix{
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+}
+
+:host ::ng-deep #period .mat-mdc-form-field-flex{
+    height: 30px !important;
+}
+
+:host ::ng-deep .ag-paging-panel{
+    height: 30px !important;
+}

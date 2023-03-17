@@ -1,0 +1,81 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 p-0 d-flex mainContainer">
+      <mat-form-field class="item">
+        <mat-label>From Currency</mat-label>
+        <mat-select [(value)]="fromCurrency" (selectionChange)="resetInput()">
+          <mat-option *ngFor="let option of currencies" [value]="option.code">
+            {{ option.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <img src="assets/images/switch.png" alt="convert" width="32" height="32" style="margin:13px 10px 0px 0px"
+        (click)="swapConversions()">
+      <mat-form-field class="item">
+        <mat-label>To Currency</mat-label>
+        <mat-select [(value)]="toCurrency" (selectionChange)="resetInput()">
+          <mat-option *ngFor="let option of currencies" [value]="option.code">
+            {{ option.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="item">
+        <mat-label>Amount ({{fromCurrency}})</mat-label>
+        <input matInput placeholder="Amount" [(ngModel)]="amount">
+      </mat-form-field>
+
+      <mat-form-field class="item">
+        <mat-label>Converted ({{toCurrency}})</mat-label>
+        <input matInput placeholder="Converted" [(ngModel)]="convertedAmount" readonly>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" style="margin-top: 10px;" (click)="convertCurrency()">Convert</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 p-0">
+      <div class="d-flex justify-content-center">
+        <button mat-raised-button color="primary" style="margin-top: 10px;" (click)="toggleGraph()">Toggle Between
+          Table/Graph</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3" *ngIf="!isGraph">
+    <div class="col-12 p-0">
+      <div class="d-flex justify-content-between">
+        <h2>Converstion Rates</h2>
+        <mat-form-field id="period">
+          <mat-select style="height: 32px;" [(value)]="selectedLap" (selectionChange)="getExchangeRatesHistroy()">
+            <mat-option *ngFor="let lap of timeLaps" [value]="lap.days">
+              {{ lap.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <ag-grid-angular style="width: 100%; height: 230px; overflow: auto;" class="ag-theme-alpine"
+        [columnDefs]="currencyRateTableColumnDefs" [pagination]="true" [paginationPageSize]="pageSize"
+        [defaultColDef]="defaultColDef" [rowData]="currencyRateTableData" [rowSelection]="'multiple'"
+        [animateRows]="true" (gridReady)="onGridReady($event)" [rowHeight]="30" [headerHeight]="30">
+      </ag-grid-angular>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="isGraph">
+    <div class="col-12 p-0" id='chart'>
+      <highcharts-chart [Highcharts]="Highcharts" [options]="chartOptions"></highcharts-chart>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-12 p-0">
+      <h2>Converstion Record</h2>
+      <ag-grid-angular style="width: 100%; height: 230px; overflow: auto;" class="ag-theme-alpine"
+        [columnDefs]="historyTableColumnDefs" [defaultColDef]="defaultColDef" [rowData]="historyTableData"
+        [rowSelection]="'multiple'" [animateRows]="true" (gridReady)="onGridReady($event)"
+        (cellClicked)="onCellClicked($event)" [rowHeight]="30" [headerHeight]="30"></ag-grid-angular>
+    </div>
+  </div>
+</div>
